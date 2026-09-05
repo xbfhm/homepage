@@ -20,6 +20,14 @@
 
 > 也可以不用 GitHub：在 Pages 创建时选择 **直接上传（Direct Upload）**，把 `index.html`、`avatar.jpg`、`favicon.png` 三个文件一起拖进去上传即可。
 
+## 动画与动效（开源库）
+
+- **AOS**（Animate On Scroll，MIT）：滚动进入视口时的渐入/位移动画
+- **Typed.js**（MIT）：Hero 区打字机逐字效果
+- 自写原生实现：顶部阅读进度条、极光背景、粒子连线、数字滚动、卡片光效/上浮、回到顶部按钮
+
+> 以上库均通过 jsDelivr CDN 引入，加载失败会自动降级为无动画显示（不影响阅读内容）。
+
 ## 修改内容
 
 - 头像：替换根目录下的 `avatar.jpg`（建议正方形，512×512 左右）。
