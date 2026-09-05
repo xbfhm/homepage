@@ -123,7 +123,9 @@
   }
   .badge:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 18px rgba(79,110,247,.16); }
   .badge svg { width: 16px; height: 16px; }
-  .scroll-hint { position: relative; z-index: 1; text-align: center; margin-top: 26px; color: #aab1bf; font-size: 12.5px; }
+  .visit-line { margin-top: 18px; font-size: 14px; color: var(--ink-soft); }
+  .visit-line b { color: var(--accent); font-size: 16px; }
+  .scroll-hint { position: relative; z-index: 1; text-align: center; margin-top: 24px; color: #aab1bf; font-size: 12.5px; }
   .scroll-hint .mouse { width: 22px; height: 34px; border: 2px solid #c7cde0; border-radius: 12px; margin: 0 auto 6px; position: relative; }
   .scroll-hint .mouse::after { content: ""; position: absolute; left: 50%; top: 6px; width: 3px; height: 7px; margin-left: -1.5px; background: var(--accent); border-radius: 2px; animation: wheel 1.6s ease-in-out infinite; }
   @keyframes wheel { 0%{transform:translateY(0);opacity:1} 70%{transform:translateY(10px);opacity:0} 100%{transform:translateY(0);opacity:0} }
@@ -186,6 +188,40 @@
   .proj .gh-link span { transition: transform .25s; }
   .proj .gh-link:hover span { transform: translateX(4px); }
 
+  /* ---- Fun Lab ---- */
+  .fun-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
+  .fun-card {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 26px;
+  }
+  .fun-label { font-size: 14px; font-weight: 700; color: var(--accent); margin-bottom: 12px; letter-spacing: .3px; }
+  .quote-text { font-size: 17px; color: var(--ink); font-weight: 600; min-height: 52px; margin-bottom: 14px; }
+  .fun-big { font-size: 15.5px; color: var(--ink-soft); margin-bottom: 14px; }
+  .fun-big b { color: var(--accent); font-size: 22px; }
+  .fun-btn {
+    border: 1px solid var(--line); background: #fafbfe; color: var(--ink-soft);
+    font-size: 14px; font-weight: 600; padding: 9px 18px; border-radius: 10px; cursor: pointer;
+    transition: all .2s;
+  }
+  .fun-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .fun-btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .fun-btn.primary:hover { background: #3f5ce0; }
+  .fun-btn:disabled { opacity: .5; cursor: not-allowed; }
+  #msgForm { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+  #msgForm input {
+    flex: 1; min-width: 140px; padding: 10px 14px; border: 1px solid var(--line);
+    border-radius: 10px; font-size: 14px; font-family: inherit; outline: none; transition: border-color .2s;
+  }
+  #msgForm input:focus { border-color: var(--accent); }
+  #msgName { max-width: 180px; }
+  .msg-list { display: flex; flex-direction: column; gap: 10px; max-height: 380px; overflow-y: auto; }
+  .msg-item { background: #fafbfe; border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; }
+  .msg-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .msg-name { font-weight: 700; font-size: 14px; color: var(--accent); }
+  .msg-time { font-size: 12px; color: #9aa1ad; }
+  .msg-body { font-size: 14.5px; color: var(--ink); white-space: pre-wrap; word-break: break-word; }
+  .msg-empty { color: #9aa1ad; font-size: 14px; text-align: center; padding: 18px 0; }
+
   /* ---- Social ---- */
   .social-card {
     background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
@@ -232,6 +268,8 @@
     .badges { justify-content: center; }
     .nav .links { gap: 16px; }
     .grid { grid-template-columns: 1fr; }
+    .fun-grid { grid-template-columns: 1fr; }
+    #msgName { max-width: 100%; }
     .avatar { width: 116px; height: 116px; }
   }
 </style>
@@ -251,6 +289,7 @@
     <nav class="links">
       <a href="#about">关于我</a>
       <a href="#projects">项目</a>
+      <a href="#fun">实验室</a>
       <a href="#contact">联系</a>
     </nav>
   </div>
@@ -274,11 +313,8 @@
             <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
             GitHub
           </a>
-          <a class="badge" href="https://space.bilibili.com/1595526280" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.8 4.5c1.1.1 1.9.3 2.7.7.5.3 1 .9 1.3 1.4.3.5.5 1.3.6 2.1.2 1.6.2 3.3.2 5.3s0 3.7-.2 5.3c-.1.8-.3 1.6-.6 2.1-.3.5-.8 1.1-1.3 1.4-.8.4-1.6.6-2.7.7-1.9.2-3.7.3-5.8.3s-3.9-.1-5.8-.3c-1.1-.1-1.9-.3-2.7-.7-.5-.3-1-.9-1.3-1.4-.3-.5-.5-1.3-.6-2.1-.2-1.6-.2-3.3-.2-5.3s0-3.7.2-5.3c.1-.8.3-1.6.6-2.1.3-.5.8-1.1 1.3-1.4.8-.4 1.6-.6 2.7-.7 1.9-.2 3.7-.3 5.8-.3s3.9.1 5.8.3zM9.8 8.6v6.8l5.6-3.4-5.6-3.4z"/></svg>
-            bilibili
-          </a>
         </div>
+        <div class="visit-line">🌐 你是第 <b id="visits">…</b> 位访客 · 今日 <b id="visitsToday">…</b> 人</div>
       </div>
     </div>
     <div class="scroll-hint" data-aos="fade-up" data-aos-delay="200">
@@ -299,7 +335,39 @@
       <div class="stat-row">
         <div class="stat"><div class="num" data-count="8">0</div><div class="lbl">GitHub 开源仓库</div></div>
         <div class="stat"><div class="num" data-count="3" data-suffix="+">0</div><div class="lbl">上架 / 分发应用</div></div>
-        <div class="stat"><div class="num" data-count="1">0</div><div class="lbl">bilibili 账号</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Fun Lab -->
+  <section id="fun">
+    <div class="sec-head" data-aos="fade-up">
+      <h2>实验室</h2>
+      <p>Fun Lab · 由服务器驱动的小功能</p>
+    </div>
+
+    <div class="fun-grid">
+      <div class="fun-card" data-aos="fade-up">
+        <div class="fun-label">✨ 随机一言</div>
+        <p class="quote-text" id="quote">加载中…</p>
+        <button class="fun-btn" id="newQuote" type="button">换一句</button>
+      </div>
+      <div class="fun-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="fun-label">🐟 摸鱼计数器</div>
+        <p class="fun-big">全网网友已经摸了 <b id="clickCount">0</b> 次鱼</p>
+        <button class="fun-btn primary" id="clickBtn" type="button">我也摸一下 +1</button>
+      </div>
+    </div>
+
+    <div class="fun-card" data-aos="fade-up">
+      <div class="fun-label">💬 留言板</div>
+      <form id="msgForm">
+        <input id="msgName" type="text" placeholder="昵称（可留空）" maxlength="20">
+        <input id="msgContent" type="text" placeholder="说点什么吧…" maxlength="500" required>
+        <button class="fun-btn primary" type="submit">留言</button>
+      </form>
+      <div class="msg-list" id="msgList">
+        <div class="msg-empty">加载中…</div>
       </div>
     </div>
   </section>
@@ -370,14 +438,6 @@
       <p>Contact</p>
     </div>
     <div class="social-card" data-aos="fade-up" data-aos-delay="100">
-      <a class="social-link" href="https://space.bilibili.com/1595526280" target="_blank" rel="noopener">
-        <div class="s-icon" style="background:#fb7299;color:#fff;">📺</div>
-        <div class="s-info">
-          <div class="t">bilibili · 西北风喝吗</div>
-          <div class="d">space.bilibili.com/1595526280</div>
-        </div>
-        <span class="arrow">›</span>
-      </a>
       <a class="social-link" href="https://github.com/xbfhm" target="_blank" rel="noopener">
         <div class="s-icon" style="background:#24292f;color:#fff;">⌥</div>
         <div class="s-info">
@@ -395,10 +455,8 @@
   © 2026 西北风喝吗 · 个人主页
   <span class="sep">·</span>
   <a href="https://github.com/xbfhm" target="_blank" rel="noopener">GitHub</a>
-  <span class="sep">·</span>
-  <a href="https://space.bilibili.com/1595526280" target="_blank" rel="noopener">bilibili</a>
   <br>
-  Powered by Cloudflare
+  Powered by 阿里云服务器
 </footer>
 
 <button id="topBtn" aria-label="回到顶部" title="回到顶部">↑</button>
@@ -409,15 +467,13 @@
 <script src="vendor/typed.js"></script>
 <script>
   (function () {
-    // ---- AOS 初始化 + CDN 兜底 ----
+    // ---- AOS 初始化 + 兜底 ----
     function initAOS() {
       if (window.AOS) {
         AOS.init({ duration: 700, easing: 'ease-out-cubic', once: true, offset: 60 });
       }
     }
     initAOS();
-
-    // 兜底：若 CDN 加载失败，去掉 data-aos 让内容直接可见
     setTimeout(function () {
       if (!window.AOS) {
         document.querySelectorAll('[data-aos]').forEach(function (el) { el.removeAttribute('data-aos'); });
@@ -426,7 +482,7 @@
       }
     }, 2000);
 
-    // ---- 打字机效果（Typed.js）+ 兜底 ----
+    // ---- 打字机效果 ----
     var typedEl = document.getElementById('typed');
     if (window.Typed && typedEl) {
       new Typed(typedEl, {
@@ -434,7 +490,6 @@
         typeSpeed: 60, backSpeed: 35, backDelay: 1500, loop: true, showCursor: false
       });
     }
-    // 若 Typed.js 未加载，保留默认静态文字（已在 HTML 里写好）
 
     // ---- 数字滚动 ----
     function animateCount(el) {
@@ -462,7 +517,7 @@
     }
     watchCounts();
 
-    // ---- 顶部进度条 ----
+    // ---- 顶部进度条 + 回到顶部 ----
     var progress = document.getElementById('progress');
     var topBtn = document.getElementById('topBtn');
     function onScroll() {
@@ -482,10 +537,7 @@
       var ctx = canvas.getContext('2d');
       var parent = canvas.parentElement;
       var dots = [], W, H;
-      function resize() {
-        W = canvas.width = parent.offsetWidth;
-        H = canvas.height = parent.offsetHeight;
-      }
+      function resize() { W = canvas.width = parent.offsetWidth; H = canvas.height = parent.offsetHeight; }
       resize();
       window.addEventListener('resize', resize);
       var count = Math.min(55, Math.floor(W / 18));
@@ -502,7 +554,6 @@
           ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
           ctx.fillStyle = 'rgba(79,110,247,.28)'; ctx.fill();
         }
-        // 连线
         for (var i = 0; i < dots.length; i++) {
           for (var j = i + 1; j < dots.length; j++) {
             var dx = dots[i].x - dots[j].x, dy = dots[i].y - dots[j].y;
@@ -518,6 +569,78 @@
       }
       draw();
     })();
+
+    // ---- 服务器功能：访客统计 ----
+    fetch('/api/visit', { method: 'POST' }).then(function (r) { return r.json(); }).then(function (d) {
+      var v = document.getElementById('visits'), vt = document.getElementById('visitsToday');
+      if (v) v.textContent = d.visits_total;
+      if (vt) vt.textContent = d.visits_today;
+    }).catch(function () { var vl = document.querySelector('.visit-line'); if (vl) vl.style.display = 'none'; });
+
+    // ---- 服务器功能：随机一言 ----
+    var quoteEl = document.getElementById('quote');
+    var JS_QUOTES = ['生活不止眼前的苟且，还有诗和远方。','前方高能反应，请注意！','种一棵树最好的时间是十年前，其次是现在。','路虽远，行则将至；事虽难，做则必成。','越努力，越幸运。','保持热爱，奔赴山海。','愿你出走半生，归来仍是少年。','星光不问赶路人，时光不负有心人。','心之所向，素履以往。','一切都会好起来的。','有梦就去追，趁年轻。','热爱可抵岁月漫长。','但行好事，莫问前程。','知足者常乐。','明天又是新的一天。'];
+    function loadQuote() {
+      fetch('/api/quote').then(function (r) { return r.json(); }).then(function (d) {
+        if (quoteEl) quoteEl.textContent = d.quote + (d.source ? ' —— ' + d.source : '');
+      }).catch(function () { if (quoteEl) quoteEl.textContent = JS_QUOTES[Math.floor(Math.random() * JS_QUOTES.length)]; });
+    }
+    loadQuote();
+    var newQuoteBtn = document.getElementById('newQuote');
+    if (newQuoteBtn) newQuoteBtn.addEventListener('click', loadQuote);
+
+    // ---- 服务器功能：摸鱼计数 ----
+    var clickCountEl = document.getElementById('clickCount');
+    var clickBtn = document.getElementById('clickBtn');
+    function loadClicks() {
+      fetch('/api/stats').then(function (r) { return r.json(); }).then(function (d) {
+        if (clickCountEl) clickCountEl.textContent = d.clicks;
+      }).catch(function () { if (clickCountEl) clickCountEl.textContent = '—'; if (clickBtn) clickBtn.disabled = true; });
+    }
+    loadClicks();
+    if (clickBtn) clickBtn.addEventListener('click', function () {
+      clickBtn.disabled = true;
+      fetch('/api/click', { method: 'POST' }).then(function (r) { return r.json(); }).then(function (d) {
+        if (clickCountEl) clickCountEl.textContent = d.clicks;
+        clickBtn.disabled = false;
+      }).catch(function () { clickBtn.disabled = false; });
+    });
+
+    // ---- 服务器功能：留言板 ----
+    var msgList = document.getElementById('msgList');
+    var msgForm = document.getElementById('msgForm');
+    function esc(s) {
+      var d = document.createElement('div');
+      d.textContent = s;
+      return d.innerHTML;
+    }
+    function loadMessages() {
+      fetch('/api/messages').then(function (r) { return r.json(); }).then(function (d) {
+        if (!msgList) return;
+        var msgs = d.messages || [];
+        if (!msgs.length) { msgList.innerHTML = '<div class="msg-empty">还没有留言，来抢沙发吧~</div>'; return; }
+        var html = '';
+        msgs.forEach(function (m) {
+          html += '<div class="msg-item"><div class="msg-head"><span class="msg-name">' + esc(m.name) + '</span><span class="msg-time">' + esc(m.time) + '</span></div><div class="msg-body">' + esc(m.content) + '</div></div>';
+        });
+        msgList.innerHTML = html;
+      }).catch(function () { if (msgList) msgList.innerHTML = '<div class="msg-empty">留言板需要服务器支持，请访问服务器版</div>'; if (msgForm) msgForm.style.display = 'none'; });
+    }
+    loadMessages();
+    if (msgForm) msgForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var name = document.getElementById('msgName').value.trim();
+      var content = document.getElementById('msgContent').value.trim();
+      if (!content) return;
+      fetch('/api/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name, content: content })
+      }).then(function (r) { return r.json(); }).then(function () {
+        document.getElementById('msgContent').value = '';
+        loadMessages();
+      }).catch(function () {});
+    });
   })();
 </script>
 </body>
