@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="西北风喝吗的个人主页 —— 独立开发者，热爱编程与动漫。这里是关于我、我的项目与联系方式的介绍。">
+<meta name="author" content="西北风喝吗">
+<title>西北风喝吗 · 个人主页</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<style>
+  :root {
+    --bg: #f6f7fb;
+    --card: #ffffff;
+    --ink: #1f2430;
+    --ink-soft: #5b6472;
+    --line: #e6e9f0;
+    --accent: #4f6ef7;
+    --accent-2: #6a5cff;
+    --radius: 16px;
+    --shadow: 0 1px 2px rgba(16,24,40,.04), 0 8px 24px rgba(16,24,40,.06);
+    --shadow-lg: 0 2px 6px rgba(16,24,40,.05), 0 20px 48px rgba(16,24,40,.10);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
+
+  /* ---- Header ---- */
+  header {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,.82);
+    backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+  .nav .logo { font-weight: 700; font-size: 17px; letter-spacing: .3px; }
+  .nav .logo span { color: var(--accent); }
+  .nav .links { display: flex; gap: 26px; }
+  .nav .links a { font-size: 14.5px; color: var(--ink-soft); transition: color .2s; }
+  .nav .links a:hover { color: var(--ink); }
+
+  /* ---- Hero ---- */
+  .hero { padding: 64px 0 44px; }
+  .hero-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    box-shadow: var(--shadow-lg);
+    padding: 48px 40px;
+    display: flex; align-items: center; gap: 40px; flex-wrap: wrap;
+  }
+  .avatar {
+    width: 128px; height: 128px; flex: none;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #fff;
+    box-shadow: 0 0 0 4px var(--accent), 0 12px 30px rgba(79,110,247,.28);
+  }
+  .hero-text h1 { font-size: 32px; font-weight: 800; letter-spacing: .5px; }
+  .hero-text .tagline { color: var(--accent); font-weight: 600; font-size: 15px; margin: 6px 0 12px; }
+  .hero-text p { color: var(--ink-soft); font-size: 15.5px; max-width: 560px; }
+  .badges { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 13.5px; font-weight: 600;
+    padding: 8px 15px; border-radius: 999px;
+    border: 1px solid var(--line); background: #fafbfe; color: var(--ink-soft);
+    transition: all .2s;
+  }
+  .badge:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+  .badge svg { width: 16px; height: 16px; }
+
+  /* ---- Sections ---- */
+  section { padding: 30px 0; }
+  .sec-head { margin-bottom: 22px; }
+  .sec-head h2 { font-size: 22px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+  .sec-head h2::before { content: ""; width: 5px; height: 22px; background: var(--accent); border-radius: 3px; }
+  .sec-head p { color: var(--ink-soft); font-size: 14.5px; margin-top: 6px; }
+
+  /* ---- About ---- */
+  .about-card {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 30px 32px;
+  }
+  .about-card p { color: var(--ink-soft); font-size: 15.5px; margin-bottom: 12px; }
+  .about-card p:last-child { margin-bottom: 0; }
+  .about-card b { color: var(--ink); }
+  .stat-row { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 22px; }
+  .stat {
+    flex: 1; min-width: 120px; text-align: center;
+    background: #fafbfe; border: 1px solid var(--line); border-radius: 12px; padding: 18px 12px;
+  }
+  .stat .num { font-size: 24px; font-weight: 800; color: var(--accent); }
+  .stat .lbl { font-size: 13px; color: var(--ink-soft); margin-top: 3px; }
+
+  /* ---- Projects ---- */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+  .proj {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 24px; display: flex; flex-direction: column;
+    transition: transform .18s, box-shadow .18s, border-color .18s;
+  }
+  .proj:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: #d7dcff; }
+  .proj-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+  .proj .icon { width: 42px; height: 42px; flex: none; border-radius: 11px; display: grid; place-items: center; font-size: 20px; }
+  .proj h3 { font-size: 17px; font-weight: 700; }
+  .proj h3 a:hover { color: var(--accent); }
+  .proj .stars { font-size: 13px; color: var(--ink-soft); white-space: nowrap; }
+  .proj .desc { color: var(--ink-soft); font-size: 14px; flex: 1; margin-bottom: 16px; }
+  .proj .meta { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tag { font-size: 12px; font-weight: 600; color: var(--accent); background: #eef1ff; padding: 4px 10px; border-radius: 7px; }
+  .tag.gray { color: #6b7280; background: #f1f2f5; }
+  .proj .gh-link { margin-top: 14px; font-size: 13.5px; font-weight: 600; color: var(--accent); }
+
+  /* ---- Social ---- */
+  .social-card {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 28px 32px; display: flex; flex-direction: column; gap: 14px;
+  }
+  .social-link {
+    display: flex; align-items: center; gap: 14px;
+    padding: 16px 18px; border-radius: 13px; border: 1px solid var(--line);
+    background: #fafbfe; transition: all .18s;
+  }
+  .social-link:hover { border-color: var(--accent); background: #fff; transform: translateX(3px); }
+  .social-link .s-icon { width: 44px; height: 44px; flex: none; border-radius: 11px; display: grid; place-items: center; font-size: 22px; }
+  .social-link .s-info { flex: 1; min-width: 0; }
+  .social-link .s-info .t { font-weight: 700; font-size: 15.5px; }
+  .social-link .s-info .d { font-size: 13.5px; color: var(--ink-soft); }
+  .social-link .arrow { color: #c2c8d4; font-size: 18px; }
+
+  footer { text-align: center; color: #9aa1ad; font-size: 13px; padding: 44px 0 40px; }
+  footer a { color: var(--ink-soft); }
+  footer a:hover { color: var(--accent); }
+  footer .sep { margin: 0 8px; }
+
+  @media (max-width: 640px) {
+    .hero { padding: 40px 0 30px; }
+    .hero-card { padding: 34px 24px; gap: 24px; justify-content: center; text-align: center; }
+    .hero-text { text-align: center; }
+    .badges { justify-content: center; }
+    .nav .links { gap: 16px; }
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="logo">西北风喝吗<span>.</span></div>
+    <nav class="links">
+      <a href="#about">关于我</a>
+      <a href="#projects">项目</a>
+      <a href="#contact">联系</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-card">
+      <img class="avatar" src="avatar.jpg" alt="西北风喝吗的头像">
+      <div class="hero-text">
+        <h1>西北风喝吗</h1>
+        <div class="tagline">独立开发者 · 动漫爱好者</div>
+        <p>你好，欢迎来到我的个人主页。我是一名热爱编程的开发者，业余时间喜欢看动漫、追番，也喜欢把自己感兴趣的东西做成 App 和小工具。这里记录了我的项目与联系方式。</p>
+        <div class="badges">
+          <a class="badge" href="https://github.com/xbfhm" target="_blank" rel="noopener">
+            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+            GitHub
+          </a>
+          <a class="badge" href="https://space.bilibili.com/1595526280" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.8 4.5c1.1.1 1.9.3 2.7.7.5.3 1 .9 1.3 1.4.3.5.5 1.3.6 2.1.2 1.6.2 3.3.2 5.3s0 3.7-.2 5.3c-.1.8-.3 1.6-.6 2.1-.3.5-.8 1.1-1.3 1.4-.8.4-1.6.6-2.7.7-1.9.2-3.7.3-5.8.3s-3.9-.1-5.8-.3c-1.1-.1-1.9-.3-2.7-.7-.5-.3-1-.9-1.3-1.4-.3-.5-.5-1.3-.6-2.1-.2-1.6-.2-3.3-.2-5.3s0-3.7.2-5.3c.1-.8.3-1.6.6-2.1.3-.5.8-1.1 1.3-1.4.8-.4 1.6-.6 2.7-.7 1.9-.2 3.7-.3 5.8-.3s3.9.1 5.8.3zM9.8 8.6v6.8l5.6-3.4-5.6-3.4z"/></svg>
+            bilibili
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- About -->
+  <section id="about">
+    <div class="sec-head">
+      <h2>关于我</h2>
+      <p>About Me</p>
+    </div>
+    <div class="about-card">
+      <p>我是 <b>西北风喝吗</b>（GitHub：<b>xbfhm</b>），一名独立开发者。平时主要用 <b>Java / Kotlin / Python</b> 做一些自己感兴趣的小项目，比如追番电视 App、音乐播放器和休闲小游戏。</p>
+      <p>工作之外，我是一名资深<b>动漫爱好者</b>，喜欢看番、研究各种有趣的作品。我保持开源，把做出来的东西都放在 GitHub 上，欢迎大家 Star 和使用。</p>
+      <div class="stat-row">
+        <div class="stat"><div class="num">8</div><div class="lbl">GitHub 开源仓库</div></div>
+        <div class="stat"><div class="num">3+</div><div class="lbl">上架 / 分发应用</div></div>
+        <div class="stat"><div class="num">1</div><div class="lbl">bilibili 账号</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects">
+    <div class="sec-head">
+      <h2>我的项目</h2>
+      <p>My Projects · 全部代码托管在 <a href="https://github.com/xbfhm" target="_blank" rel="noopener" style="color:var(--accent);font-weight:600;">github.com/xbfhm</a></p>
+    </div>
+    <div class="grid">
+
+      <div class="proj">
+        <div class="proj-top">
+          <div class="icon" style="background:#eef1ff;">📺</div>
+          <span class="stars">★ 1</span>
+        </div>
+        <h3><a href="https://github.com/xbfhm/tv" target="_blank" rel="noopener">AnimeTV（Java 原生版）</a></h3>
+        <p class="desc">追番电视应用，基于 AGE 动漫 API 免费看番，内置硬解播放器，针对老电视（Android 5.1 / Mali-450）做了优化，支持遥控器操作、自动连播与历史续看。</p>
+        <div class="meta"><span class="tag">Java</span><span class="tag">ExoPlayer</span><span class="tag gray">电视 App</span></div>
+        <a class="gh-link" href="https://github.com/xbfhm/tv" target="_blank" rel="noopener">查看仓库 →</a>
+      </div>
+
+      <div class="proj">
+        <div class="proj-top">
+          <div class="icon" style="background:#eef1ff;">🎵</div>
+          <span class="stars">★ 1</span>
+        </div>
+        <h3><a href="https://github.com/xbfhm/misaka-music" target="_blank" rel="noopener">MisakaMusic</a></h3>
+        <p class="desc">网易云音乐播放器 App，Kotlin 原生开发、无需服务器，支持账号登录、搜索、歌单、歌词校准、定时关闭与收藏同步。</p>
+        <div class="meta"><span class="tag">Kotlin</span><span class="tag gray">音乐播放器</span></div>
+        <a class="gh-link" href="https://github.com/xbfhm/misaka-music" target="_blank" rel="noopener">查看仓库 →</a>
+      </div>
+
+      <div class="proj">
+        <div class="proj-top">
+          <div class="icon" style="background:#eef1ff;">📺</div>
+          <span class="stars">—</span>
+        </div>
+        <h3><a href="https://github.com/xbfhm/ad5.1" target="_blank" rel="noopener">AnimeTV（Kivy 版）</a></h3>
+        <p class="desc">追番电视应用的早期 Kivy 版本，使用 ffpyplayer 软解 m3u8 流，同样基于 AGE 动漫 API 免费看番。</p>
+        <div class="meta"><span class="tag">Python</span><span class="tag">Kivy</span><span class="tag gray">电视 App</span></div>
+        <a class="gh-link" href="https://github.com/xbfhm/ad5.1" target="_blank" rel="noopener">查看仓库 →</a>
+      </div>
+
+      <div class="proj">
+        <div class="proj-top">
+          <div class="icon" style="background:#eef1ff;">♟️</div>
+          <span class="stars">★ 1</span>
+        </div>
+        <h3><a href="https://github.com/xbfhm/Gobang-man-machine-game" target="_blank" rel="noopener">五子棋人机对战</a></h3>
+        <p class="desc">Python 实现的五子棋，带评分 AI 人机对战，并支持通过 network 模块进行联网对战。</p>
+        <div class="meta"><span class="tag">Python</span><span class="tag gray">小游戏</span></div>
+        <a class="gh-link" href="https://github.com/xbfhm/Gobang-man-machine-game" target="_blank" rel="noopener">查看仓库 →</a>
+      </div>
+
+      <div class="proj">
+        <div class="proj-top">
+          <div class="icon" style="background:#eef1ff;">📺</div>
+          <span class="stars">—</span>
+        </div>
+        <h3><a href="https://github.com/xbfhm/kazuTVapp" target="_blank" rel="noopener">kazuTVapp</a></h3>
+        <p class="desc">动画电视应用（kazumi-tv 源码），面向电视端的动画观看应用。</p>
+        <div class="meta"><span class="tag gray">电视 App</span></div>
+        <a class="gh-link" href="https://github.com/xbfhm/kazuTVapp" target="_blank" rel="noopener">查看仓库 →</a>
+      </div>
+
+      <div class="proj">
+        <div class="proj-top">
+          <div class="icon" style="background:#eef1ff;">✨</div>
+          <span class="stars">—</span>
+        </div>
+        <h3><a href="https://github.com/xbfhm/glass-ui" target="_blank" rel="noopener">Glass UI</a></h3>
+        <p class="desc">玻璃拟态（Glassmorphism）风格 UI 演示页面，探索现代网页质感设计。</p>
+        <div class="meta"><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag gray">UI</span></div>
+        <a class="gh-link" href="https://github.com/xbfhm/glass-ui" target="_blank" rel="noopener">查看仓库 →</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <div class="sec-head">
+      <h2>联系我</h2>
+      <p>Contact</p>
+    </div>
+    <div class="social-card">
+      <a class="social-link" href="https://space.bilibili.com/1595526280" target="_blank" rel="noopener">
+        <div class="s-icon" style="background:#fb7299;color:#fff;">📺</div>
+        <div class="s-info">
+          <div class="t">bilibili · 西北风喝吗</div>
+          <div class="d">space.bilibili.com/1595526280</div>
+        </div>
+        <span class="arrow">›</span>
+      </a>
+      <a class="social-link" href="https://github.com/xbfhm" target="_blank" rel="noopener">
+        <div class="s-icon" style="background:#24292f;color:#fff;">⌥</div>
+        <div class="s-info">
+          <div class="t">GitHub · xbfhm</div>
+          <div class="d">github.com/xbfhm</div>
+        </div>
+        <span class="arrow">›</span>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  © 2026 西北风喝吗 · 个人主页
+  <span class="sep">·</span>
+  <a href="https://github.com/xbfhm" target="_blank" rel="noopener">GitHub</a>
+  <span class="sep">·</span>
+  <a href="https://space.bilibili.com/1595526280" target="_blank" rel="noopener">bilibili</a>
+  <br>
+  Powered by Cloudflare Pages
+</footer>
+
+</body>
+</html>
