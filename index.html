@@ -40,7 +40,7 @@
   /* ---- 背景图 + 遮罩 ---- */
   .bg {
     position: fixed; inset: 0; z-index: -2;
-    background: url('bg.jpg') center / cover no-repeat fixed;
+    background: url('bg.jpg?v=3') center / cover no-repeat fixed;
     background-color: #0c0f18;
   }
   .bg::after {
@@ -254,6 +254,13 @@
   .loc-row .cname { flex: 1; color: var(--ink); }
   .loc-row .ccnt { color: var(--accent); font-weight: 700; }
 
+  /* ---- 趋势图 ---- */
+  .trend-chart { display: flex; align-items: flex-end; gap: 5px; height: 170px; padding-top: 8px; overflow-x: auto; }
+  .trend-bar { flex: 1; min-width: 24px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
+  .trend-bar .bar { width: 70%; max-width: 26px; background: linear-gradient(180deg, var(--accent), var(--accent-2)); border-radius: 4px 4px 0 0; min-height: 2px; transition: height .5s; }
+  .trend-bar .val { font-size: 10.5px; color: var(--accent); margin-bottom: 2px; }
+  .trend-bar .date { font-size: 9.5px; color: var(--ink-soft); margin-top: 4px; white-space: nowrap; }
+
   /* ---- Social ---- */
   .social-card { display: flex; flex-direction: column; gap: 14px; }
   .social-link {
@@ -343,7 +350,7 @@
             GitHub
           </a>
         </div>
-        <div class="visit-line">🌐 你是第 <b id="visits">…</b> 位访客 · 今日 <b id="visitsToday">…</b> 人</div>
+        <div class="visit-line">🌐 你是第 <b id="visits">…</b> 位访客 · 今日 <b id="visitsToday">…</b> 人 · 在线 <b id="online">…</b> 人</div>
       </div>
     </div>
     <div class="scroll-hint" data-aos="fade-up" data-aos-delay="200">
@@ -420,6 +427,11 @@
       <div class="msg-list" id="msgList">
         <div class="msg-empty">加载中…</div>
       </div>
+    </div>
+
+    <div class="glass-card" data-aos="fade-up" style="margin-top:18px;">
+      <div class="fun-label">📈 访问趋势（近 14 天）</div>
+      <div class="trend-chart" id="trendChart"><div class="msg-empty">加载中…</div></div>
     </div>
   </section>
 
@@ -737,6 +749,34 @@
       }).catch(function () { list.innerHTML = '<div class="msg-empty">访客来源需要服务器支持</div>'; });
     }
     loadLocations();
+
+    // ---- 在线人数 ----
+    function loadOnline() {
+      fetch('/api/online').then(function (r) { return r.json(); }).then(function (d) {
+        var el = document.getElementById('online');
+        if (el) el.textContent = d.online;
+      }).catch(function () {});
+    }
+    loadOnline();
+    setInterval(loadOnline, 30000);
+
+    // ---- 访问趋势图 ----
+    function loadTrend() {
+      var chart = document.getElementById('trendChart');
+      if (!chart) return;
+      fetch('/api/trend?days=14').then(function (r) { return r.json(); }).then(function (d) {
+        var data = d.trend || [];
+        var max = 1;
+        data.forEach(function (x) { if (x.count > max) max = x.count; });
+        var html = '';
+        data.forEach(function (x) {
+          var h = Math.max(4, Math.round(x.count / max * 130));
+          html += '<div class="trend-bar"><span class="val">' + (x.count > 0 ? x.count : '') + '</span><div class="bar" style="height:' + h + 'px"></div><span class="date">' + x.date.slice(5) + '</span></div>';
+        });
+        chart.innerHTML = html;
+      }).catch(function () { chart.innerHTML = '<div class="msg-empty">趋势需要服务器支持</div>'; });
+    }
+    loadTrend();
 
     // ---- 留言板 ----
     var msgList = document.getElementById('msgList');

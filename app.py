@@ -135,6 +135,10 @@ QUOTES = [
 CLICK_COOLDOWN = 1.5
 _click_last = {}
 
+# 在线人数：ip_hash -> 最近活跃时间戳
+ONLINE_WINDOW = 300  # 5 分钟活跃窗口
+_online = {}
+
 
 def now_date():
     return time.strftime("%Y-%m-%d")
@@ -142,6 +146,18 @@ def now_date():
 
 def ip_hash(ip):
     return hashlib.md5(ip.encode("utf-8")).hexdigest()
+
+
+def touch_online(ip):
+    _online[ip_hash(ip)] = time.time()
+
+
+def online_count():
+    now = time.time()
+    for h in list(_online.keys()):
+        if now - _online[h] > ONLINE_WINDOW:
+            del _online[h]
+    return len(_online)
 
 
 _geo_cache = {}
@@ -300,6 +316,19 @@ def server_status():
     }
 
 
+def trend(days=14):
+    import datetime
+    today = datetime.date.today()
+    conn = get_db()
+    result = []
+    for i in range(days - 1, -1, -1):
+        d = (today - datetime.timedelta(days=i)).strftime("%Y-%m-%d")
+        cnt = conn.execute("SELECT COUNT(*) AS c FROM visits WHERE date = ?", (d,)).fetchone()["c"]
+        result.append({"date": d, "count": cnt})
+    conn.close()
+    return {"trend": result}
+
+
 def random_quote():
     """优先取 hitokoto 接口（更多样），失败则用本地 105 句。"""
     try:
@@ -415,12 +444,14 @@ class Handler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-Type", ctype)
         self.send_header("Content-Length", str(len(body)))
-        self.send_header("Cache-Control", "public, max-age=3600")
+        self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
         self.end_headers()
         self.wfile.write(body)
 
     def _handle_api(self, path):
-        record_visit(self._client_ip())
+        ip = self._client_ip()
+        record_visit(ip)
+        touch_online(ip)
 
         if path == "/api/stats":
             return self._send_json(stats())
@@ -432,6 +463,12 @@ class Handler(BaseHTTPRequestHandler):
             return self._send_json(locations())
         if path == "/api/status":
             return self._send_json(server_status())
+        if path == "/api/online":
+            return self._send_json({"online": online_count()})
+        if path == "/api/trend":
+            qs = parse_qs(urlparse(self.path).query)
+            days = min(int(qs.get("days", ["14"])[0]), 90)
+            return self._send_json(trend(days))
         if path == "/api/messages":
             if self.command == "POST":
                 try:
