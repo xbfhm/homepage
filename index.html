@@ -8,6 +8,7 @@
 <title>西北风喝吗 · 个人主页</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="favicon.png">
+<script>document.documentElement.className='aos-pending';</script>
 <!-- AOS 滚动动画库（MIT，本地托管） -->
 <link rel="stylesheet" href="vendor/aos.css">
 <style>
@@ -272,6 +273,8 @@
     #msgName { max-width: 100%; }
     .avatar { width: 116px; height: 116px; }
   }
+  /* 保底：AOS 未就绪时内容强制可见，避免白屏 */
+  html.aos-pending [data-aos]{opacity:1!important;transform:none!important;transition:none!important}
 </style>
 </head>
 <body>
@@ -471,6 +474,7 @@
     function initAOS() {
       if (window.AOS) {
         AOS.init({ duration: 700, easing: 'ease-out-cubic', once: true, offset: 60 });
+        document.documentElement.classList.remove('aos-pending');
       }
     }
     initAOS();
@@ -478,9 +482,11 @@
       if (!window.AOS) {
         document.querySelectorAll('[data-aos]').forEach(function (el) { el.removeAttribute('data-aos'); });
       } else {
-        AOS.refresh();
+        if (document.querySelectorAll('.aos-animate').length === 0) {
+          document.querySelectorAll('[data-aos]').forEach(function (el) { el.classList.add('aos-animate'); });
+        }
       }
-    }, 2000);
+    }, 2500);
 
     // ---- 打字机效果 ----
     var typedEl = document.getElementById('typed');
