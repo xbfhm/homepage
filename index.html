@@ -188,6 +188,16 @@
   .proj .gh-link { margin-top: 14px; font-size: 13.5px; font-weight: 600; color: var(--accent); display: inline-flex; align-items: center; gap: 4px; }
   .proj .gh-link span { transition: transform .25s; }
   .proj .gh-link:hover span { transform: translateX(4px); }
+  .proj-actions { display: flex; align-items: center; gap: 12px; margin-top: 14px; flex-wrap: wrap; }
+  .proj-actions .gh-link { margin-top: 0; }
+  .dl-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--accent); color: #fff;
+    font-size: 13.5px; font-weight: 700;
+    padding: 9px 16px; border-radius: 10px;
+    transition: all .2s;
+  }
+  .dl-btn:hover { background: #3f5ce0; transform: translateY(-2px); box-shadow: 0 8px 18px rgba(79,110,247,.3); }
 
   /* ---- Fun Lab ---- */
   .fun-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
@@ -392,7 +402,10 @@
         <h3><a href="https://github.com/xbfhm/tv" target="_blank" rel="noopener">AnimeTV（Java 原生版）</a></h3>
         <p class="desc">追番电视应用，基于 AGE 动漫 API 免费看番，内置硬解播放器，针对老电视（Android 5.1 / Mali-450）做了优化，支持遥控器操作、自动连播与历史续看。</p>
         <div class="meta"><span class="tag">Java</span><span class="tag">ExoPlayer</span><span class="tag gray">电视 App</span></div>
-        <a class="gh-link" href="https://github.com/xbfhm/tv" target="_blank" rel="noopener">查看仓库 <span>→</span></a>
+        <div class="proj-actions">
+          <a class="gh-link" href="https://github.com/xbfhm/tv" target="_blank" rel="noopener">查看仓库 <span>→</span></a>
+          <a class="dl-btn" href="/downloads/animetv.apk" download>⬇ 下载 APK</a>
+        </div>
       </div>
 
       <div class="proj" data-aos="fade-up" data-aos-delay="80">
@@ -404,7 +417,10 @@
         <h3><a href="https://github.com/xbfhm/misaka-music" target="_blank" rel="noopener">MisakaMusic</a></h3>
         <p class="desc">网易云音乐播放器 App，Kotlin 原生开发、无需服务器，支持账号登录、搜索、歌单、歌词校准、定时关闭与收藏同步。</p>
         <div class="meta"><span class="tag">Kotlin</span><span class="tag gray">音乐播放器</span></div>
-        <a class="gh-link" href="https://github.com/xbfhm/misaka-music" target="_blank" rel="noopener">查看仓库 <span>→</span></a>
+        <div class="proj-actions">
+          <a class="gh-link" href="https://github.com/xbfhm/misaka-music" target="_blank" rel="noopener">查看仓库 <span>→</span></a>
+          <a class="dl-btn" href="/downloads/misakamusic.apk" download>⬇ 下载 APK</a>
+        </div>
       </div>
 
       <div class="proj" data-aos="fade-up" data-aos-delay="160">

@@ -19,8 +19,8 @@ from urllib.parse import urlparse, parse_qs
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "site.db")
 START_TIME = time.time()
-HOST = "0.0.0.0"
-PORT = 3000
+HOST = os.environ.get("HOST", "0.0.0.0")
+PORT = int(os.environ.get("PORT", "3000"))
 
 # ---- 本地随机一言（105 句精选）----
 QUOTES = [
@@ -311,6 +311,7 @@ class Handler(BaseHTTPRequestHandler):
             ".ico": "image/x-icon",
             ".svg": "image/svg+xml",
             ".json": "application/json; charset=utf-8",
+            ".apk": "application/vnd.android.package-archive",
         }.get(ext, "application/octet-stream")
         with open(full, "rb") as f:
             body = f.read()
