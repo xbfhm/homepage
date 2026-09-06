@@ -276,6 +276,12 @@
   .social-link .s-info .t { font-weight: 700; font-size: 15.5px; }
   .social-link .s-info .d { font-size: 13.5px; color: var(--ink-soft); }
   .social-link .arrow { color: rgba(194,201,218,.5); font-size: 20px; transition: transform .2s, color .2s; }
+  .copy-btn {
+    flex: none; border: 1px solid var(--line); background: rgba(255,255,255,.08);
+    color: var(--ink); font-size: 13px; font-weight: 600; padding: 6px 14px;
+    border-radius: 8px; cursor: pointer; transition: all .2s;
+  }
+  .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
   .social-link:hover .arrow { transform: translateX(4px); color: var(--accent); }
 
   footer { text-align: center; color: rgba(194,201,218,.6); font-size: 13px; padding: 44px 0 40px; }
@@ -507,6 +513,15 @@
       <p>Contact</p>
     </div>
     <div class="glass-card social-card" data-aos="fade-up" data-aos-delay="100">
+      <a class="social-link" href="https://qm.qq.com/q/YyxnrnNOG2" target="_blank" rel="noopener">
+        <div class="s-icon" style="background:#12b7f5;color:#fff;">🐧</div>
+        <div class="s-info">
+          <div class="t">QQ · 2563805217</div>
+          <div class="d">点击加我为 QQ 好友</div>
+        </div>
+        <button class="copy-btn" id="copyQQ" type="button">复制</button>
+        <span class="arrow">›</span>
+      </a>
       <a class="social-link" href="https://github.com/xbfhm" target="_blank" rel="noopener">
         <div class="s-icon" style="background:#24292f;color:#fff;">⌥</div>
         <div class="s-info">
@@ -777,6 +792,18 @@
       }).catch(function () { chart.innerHTML = '<div class="msg-empty">趋势需要服务器支持</div>'; });
     }
     loadTrend();
+
+    // ---- 复制 QQ 号 ----
+    var copyQQ = document.getElementById('copyQQ');
+    if (copyQQ) copyQQ.addEventListener('click', function (e) {
+      e.preventDefault(); e.stopPropagation();
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText('2563805217').then(function () {
+          copyQQ.textContent = '已复制';
+          setTimeout(function () { copyQQ.textContent = '复制'; }, 1500);
+        }).catch(function () {});
+      }
+    });
 
     // ---- 留言板 ----
     var msgList = document.getElementById('msgList');
