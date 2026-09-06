@@ -144,6 +144,29 @@ def ip_hash(ip):
     return hashlib.md5(ip.encode("utf-8")).hexdigest()
 
 
+_geo_cache = {}
+
+
+def geo_lookup(ip):
+    """根据 IP 查国家（ip-api.com 免费接口，失败返回空）。"""
+    if ip in _geo_cache:
+        return _geo_cache[ip]
+    result = ("", "")
+    try:
+        req = urllib.request.Request(
+            "http://ip-api.com/json/{0}?fields=country,countryCode&lang=zh-CN".format(ip),
+            headers={"User-Agent": "Mozilla/5.0 (XbfhmSite)"},
+        )
+        with urllib.request.urlopen(req, timeout=2.5) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+        if data.get("status") == "success":
+            result = (data.get("country") or "", data.get("countryCode") or "")
+    except Exception:
+        pass
+    _geo_cache[ip] = result
+    return result
+
+
 def get_db():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
@@ -159,6 +182,11 @@ def init_db():
         ts INTEGER NOT NULL,
         UNIQUE(ip_hash, date)
     )""")
+    _cols = [r["name"] for r in conn.execute("PRAGMA table_info(visits)").fetchall()]
+    if "country" not in _cols:
+        conn.execute("ALTER TABLE visits ADD COLUMN country TEXT DEFAULT ''")
+    if "country_code" not in _cols:
+        conn.execute("ALTER TABLE visits ADD COLUMN country_code TEXT DEFAULT ''")
     conn.execute("""CREATE TABLE IF NOT EXISTS messages(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
@@ -178,9 +206,16 @@ def record_visit(ip):
     h = ip_hash(ip)
     d = now_date()
     conn = get_db()
+    exists = conn.execute(
+        "SELECT 1 FROM visits WHERE ip_hash = ? AND date = ?", (h, d)
+    ).fetchone()
+    if exists:
+        conn.close()
+        return
+    country, cc = geo_lookup(ip)
     conn.execute(
-        "INSERT OR IGNORE INTO visits(ip_hash, date, ts) VALUES(?, ?, ?)",
-        (h, d, int(time.time())),
+        "INSERT INTO visits(ip_hash, date, country, country_code, ts) VALUES(?, ?, ?, ?, ?)",
+        (h, d, country, cc, int(time.time())),
     )
     conn.commit()
     conn.close()
@@ -199,6 +234,64 @@ def stats():
         "visits_today": today,
         "clicks": clicks,
         "uptime_seconds": int(time.time() - START_TIME),
+        "started_at": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(START_TIME)),
+    }
+
+
+def locations():
+    conn = get_db()
+    rows = conn.execute(
+        "SELECT country, country_code, COUNT(*) AS cnt FROM visits "
+        "WHERE country != '' GROUP BY country ORDER BY cnt DESC LIMIT 30"
+    ).fetchall()
+    conn.close()
+    return {
+        "locations": [
+            {"country": r["country"], "country_code": r["country_code"], "count": r["cnt"]}
+            for r in rows
+        ]
+    }
+
+
+def server_status():
+    mem_total = mem_used = 0
+    try:
+        info = {}
+        with open("/proc/meminfo") as f:
+            for line in f:
+                k, v = line.split(":", 1)
+                info[k.strip()] = int(v.strip().split()[0])
+        mem_total = info.get("MemTotal", 0)
+        mem_used = mem_total - info.get("MemAvailable", 0)
+    except Exception:
+        pass
+    disk_total = disk_used = 0
+    try:
+        st = os.statvfs("/")
+        disk_total = st.f_blocks * st.f_frsize
+        disk_used = (st.f_blocks - st.f_bfree) * st.f_frsize
+    except Exception:
+        pass
+    load = ""
+    try:
+        with open("/proc/loadavg") as f:
+            load = f.read().strip()
+    except Exception:
+        pass
+    sys_uptime = 0
+    try:
+        with open("/proc/uptime") as f:
+            sys_uptime = float(f.read().split()[0])
+    except Exception:
+        pass
+    import sys as _sys
+    return {
+        "memory": {"total": mem_total, "used": mem_used},
+        "disk": {"total": disk_total, "used": disk_used},
+        "load": load,
+        "sys_uptime": int(sys_uptime),
+        "app_uptime": int(time.time() - START_TIME),
+        "python": ".".join(map(str, _sys.version_info[:3])),
         "started_at": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(START_TIME)),
     }
 
@@ -331,6 +424,10 @@ class Handler(BaseHTTPRequestHandler):
             return self._send_json(stats())
         if path == "/api/quote":
             return self._send_json(random_quote())
+        if path == "/api/locations":
+            return self._send_json(locations())
+        if path == "/api/status":
+            return self._send_json(server_status())
         if path == "/api/messages":
             if self.command == "POST":
                 try:
