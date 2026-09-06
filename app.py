@@ -213,11 +213,15 @@ def record_visit(ip):
         conn.close()
         return
     country, cc = geo_lookup(ip)
-    conn.execute(
-        "INSERT INTO visits(ip_hash, date, country, country_code, ts) VALUES(?, ?, ?, ?, ?)",
-        (h, d, country, cc, int(time.time())),
-    )
-    conn.commit()
+    try:
+        conn.execute(
+            "INSERT OR IGNORE INTO visits(ip_hash, date, country, country_code, ts) VALUES(?, ?, ?, ?, ?)",
+            (h, d, country, cc, int(time.time())),
+        )
+        conn.commit()
+    except sqlite3.IntegrityError:
+        # 并发下另一个线程已插入，忽略即可
+        pass
     conn.close()
 
 
